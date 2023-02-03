@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "my_app",
+    "slug": "my_app",
+    "version": "1.0.0",
+    "orientation": "default",
+
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {}
+  }
+}
