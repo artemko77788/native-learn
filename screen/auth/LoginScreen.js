@@ -16,7 +16,7 @@ import {
 
 const initialState = { email: "", password: "" };
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
@@ -102,6 +102,16 @@ export default function LoginScreen() {
               >
                 <Text style={styles.btnTitle}>SIGN IN</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ alignItems: "center", justifyContent: "center" }}
+                onPress={() => navigation.navigate("REGISTER")}
+              >
+                <Text style={{ marginTop: 10, color: "#f0f8ff" }}>
+                  If you have
+                  <Text style={styles.btnRedirect}> go to Register</Text>
+                </Text>
+              </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -135,7 +145,12 @@ const styles = StyleSheet.create({
   form: {
     // marginHorizontal: 40
   },
-  inputTitle: { color: "#f0f8ff", marginTop: 10, fontSize: 18 },
+  inputTitle: {
+    color: "#f0f8ff",
+    marginTop: 15,
+    marginBottom: 10,
+    fontSize: 18,
+  },
   btn: {
     height: 40,
     borderRadius: 6,
@@ -175,5 +190,8 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#f0f8ff",
     fontSize: 30,
+  },
+  btnRedirect: {
+    color: `#1e90ff`,
   },
 });

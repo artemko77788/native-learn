@@ -12,11 +12,12 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Dimensions,
+  Button,
 } from "react-native";
 
-const initialState = { email: "", password: "", name: "" };
+const initialState = { email: "", password: "", nickname: "" };
 
-export default function RegisterScreen() {
+export default function RegisterScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
@@ -39,6 +40,7 @@ export default function RegisterScreen() {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(initialState);
+    console.log(state);
   };
 
   const hideKeyboardOnTouchScreen = () => {
@@ -75,9 +77,9 @@ export default function RegisterScreen() {
                   style={styles.input}
                   textAlign={"center"}
                   onFocus={() => setIsShowKeyboard(true)}
-                  value={state.name}
+                  value={state.nickname}
                   onChangeText={(value) =>
-                    setState((prev) => ({ ...prev, name: value }))
+                    setState((prev) => ({ ...prev, nickname: value }))
                   }
                 />
               </View>
@@ -94,7 +96,7 @@ export default function RegisterScreen() {
                   }
                 />
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View>
                 <Text style={styles.inputTitle}>PASSWORD</Text>
                 <TextInput
                   onFocus={() => setIsShowKeyboard(true)}
@@ -112,7 +114,14 @@ export default function RegisterScreen() {
                 activeOpacity={0.7}
                 onPress={keyboardHide}
               >
-                <Text style={styles.btnTitle}>SIGN IN</Text>
+                <Text style={styles.btnTitle}>SIGN UP</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ alignItems: "center", justifyContent: "center" }}
+                onPress={() => navigation.navigate("LOGIN")}
+              >
+                <Text style={styles.btnRedirect}>go to Login</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
@@ -147,7 +156,12 @@ const styles = StyleSheet.create({
   form: {
     // marginHorizontal: 40
   },
-  inputTitle: { color: "#f0f8ff", marginTop: 10, fontSize: 18 },
+  inputTitle: {
+    color: "#f0f8ff",
+    marginTop: 15,
+    marginBottom: 10,
+    fontSize: 18,
+  },
   btn: {
     height: 40,
     borderRadius: 6,
@@ -187,5 +201,9 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#f0f8ff",
     fontSize: 30,
+  },
+  btnRedirect: {
+    color: `#1e90ff`,
+    marginTop: 10,
   },
 });
