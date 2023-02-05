@@ -17,7 +17,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 export const useRoute = (isAuth) => {
-  if (!isAuth) {
+  if (isAuth) {
     return (
       <AuthStack.Navigator>
         <AuthStack.Screen

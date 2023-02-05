@@ -6,7 +6,7 @@ export default function App() {
   const routing = useRoute(true);
 
   const [fontsLoaded] = useFonts({
-    Kani: require("./assets/fonts/Kanit-Italic.ttf"),
+    "DMMono-Regular": require("./assets/fonts/Kanit-Italic.ttf"),
     Itim: require("./assets/fonts/Itim-Regular.ttf"),
   });
 
