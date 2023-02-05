@@ -1,42 +1,50 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, FlatList, Image, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, FlatList, Image, Button } from "react-native";
 
-const PostsScreen = ({ route, navigation }) => {
+const DefaultScreenPosts = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
+  console.log("route.params", route.params);
+
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);
     }
   }, [route.params]);
-
-  console.log(posts);
-
+  console.log("posts", posts);
   return (
-    <View style={s.container}>
+    <View style={styles.container}>
       <FlatList
-        style={{ marginTop: 50 }}
         data={posts}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 10, borderRadius: 10 }}>
+          <View
+            style={{
+              marginBottom: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Image
               source={{ uri: item.photo }}
-              style={{ marginHorizontal: 10, height: 300, borderRadius: 10 }}
+              style={{ width: 350, height: 200 }}
             />
           </View>
         )}
       />
-      <Button title='to Map' onPress={() => {}} />
-      <Button title='to Comments' onPress={() => {}} />
+      <Button title='go to map' onPress={() => navigation.navigate("Map")} />
+      <Button
+        title='go to Comments'
+        onPress={() => navigation.navigate("Comments")}
+      />
     </View>
   );
 };
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
   },
 });
 
-export default PostsScreen;
+export default DefaultScreenPosts;
