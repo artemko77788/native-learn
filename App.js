@@ -1,34 +1,16 @@
-import { useCallback, useEffect } from "react";
-import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import LoginScreen from "./screen/auth/LoginScreen";
-import RegisterScreen from "./screen/auth/RegisterScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { useRoute } from "./router";
 
 export default function App() {
+  const routing = useRoute(true);
+
   const [fontsLoaded] = useFonts({
-    Kani: require("./assets/fonts/Kanit-Italic.ttf"),
+    "DMMono-Regular": require("./assets/fonts/Kanit-Italic.ttf"),
     Itim: require("./assets/fonts/Itim-Regular.ttf"),
   });
 
-  useEffect(() => {
-    async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
-    }
-    prepare();
-  });
-
-  const onLayout = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   if (!fontsLoaded) return null;
 
-  return (
-    <>
-      {/* <LoginScreen onLayout={onLayout} /> */}
-      <RegisterScreen nLayout={onLayout} />
-    </>
-  );
+  return <NavigationContainer>{routing}</NavigationContainer>;
 }
