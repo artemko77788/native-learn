@@ -1,16 +1,45 @@
-import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { useRoute } from "./router";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+
+import { onAuthStateChanged } from "firebase/auth";
+
+import auth from "./firebase/config";
+
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useCallback, useState } from "react";
 
 export default function App() {
-  const routing = useRoute(true);
+  const [user, setUser] = useState(null);
+  const routing = useRoute(user);
 
-  const [fontsLoaded] = useFonts({
-    "DMMono-Regular": require("./assets/fonts/Kanit-Italic.ttf"),
-    Itim: require("./assets/fonts/Itim-Regular.ttf"),
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(user);
+      const uid = user.uid;
+    } else {
+    }
   });
 
-  if (!fontsLoaded) return null;
+  const [fontsLoaded] = useFonts({
+    Kanit: require("./assets/fonts/Kanit-Italic.ttf"),
+  });
 
-  return <NavigationContainer>{routing}</NavigationContainer>;
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <Provider store={store} onLayoutRootView={onLayoutRootView}>
+      <NavigationContainer>{routing}</NavigationContainer>
+    </Provider>
+  );
 }
