@@ -11,8 +11,10 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Dimensions,
-  Button,
 } from "react-native";
+
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/outhOperations";
 
 const initialState = {
   email: "",
@@ -20,7 +22,6 @@ const initialState = {
 };
 
 export default function LoginScreen({ navigation }) {
-  console.log("navigation", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
 
@@ -28,26 +29,30 @@ export default function LoginScreen({ navigation }) {
     Dimensions.get("window").width - 20 * 2
   );
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width - 20 * 2;
       setdimensions(width);
     };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+    return () => dimensionsHandler.remove();
   }, []);
 
-  const keyboardHide = () => {
+  const handleSignUp = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignInUser(state));
     setstate(initialState);
+  };
+  const hideKeyboardOnTouch = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={hideKeyboardOnTouch}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -63,10 +68,13 @@ export default function LoginScreen({ navigation }) {
                 width: dimensions,
               }}
             >
-              <View style={styles.header}>
-                <Text style={styles.headerTitle}>Hello again</Text>
-                <Text style={styles.headerTitle}>Welcome back</Text>
-              </View>
+              {!isShowKeyboard && (
+                <View style={styles.header}>
+                  <Text style={styles.headerTitle}>Hello again</Text>
+                  <Text style={styles.headerTitle}>Welcome back</Text>
+                </View>
+              )}
+
               <View>
                 <Text style={styles.inputTitle}>EMAIL ADDRES</Text>
                 <TextInput
@@ -75,7 +83,6 @@ export default function LoginScreen({ navigation }) {
                   textAlign={"center"}
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.email}
-                  onChange={(nativeEvent) => console.log(nativeEvent)}
                   onChangeText={(value) =>
                     setstate((prevState) => ({ ...prevState, email: value }))
                   }
@@ -97,7 +104,7 @@ export default function LoginScreen({ navigation }) {
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.btn}
-                onPress={keyboardHide}
+                onPress={handleSignUp}
               >
                 <Text style={styles.btnTitle}>SIGN IN</Text>
               </TouchableOpacity>
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
     color: "#f0f8ff",
     marginBottom: 10,
     fontSize: 18,
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
   btn: {
     borderRadius: 6,
@@ -173,7 +180,7 @@ const styles = StyleSheet.create({
   btnTitle: {
     color: Platform.OS === "ios" ? "#4169e1" : "#f0f8ff",
     fontSize: 18,
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
   header: {
     alignItems: "center",
@@ -182,6 +189,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 40,
     color: "#f0f8ff",
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
 });

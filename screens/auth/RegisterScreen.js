@@ -11,8 +11,11 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Dimensions,
-  Button,
 } from "react-native";
+
+import { useDispatch } from "react-redux";
+
+import { authSignUpUser } from "../../redux/auth/outhOperations";
 
 const initialState = {
   email: "",
@@ -21,34 +24,37 @@ const initialState = {
 };
 
 export default function RegisterScreen({ navigation }) {
-  console.log(Platform.OS);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
-
   const [dimensions, setdimensions] = useState(
-    Dimensions.get("window").width - 20 * 2
+    Dimensions.get("window").width - 50 * 2
   );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
+      const width = Dimensions.get("window").width - 50 * 2;
       setdimensions(width);
     };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+    return () => dimensionsHandler.remove();
   }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignUpUser(state));
     setstate(initialState);
   };
 
+  const hideKeyboardOnTouch = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={hideKeyboardOnTouch}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -64,17 +70,19 @@ export default function RegisterScreen({ navigation }) {
                 width: dimensions,
               }}
             >
-              <View style={styles.header}>
-                <Text style={styles.headerTitle}>Hello</Text>
-                <Text style={styles.headerTitle}>Sign up to get started</Text>
-              </View>
+              {!isShowKeyboard && (
+                <View style={styles.header}>
+                  <Text style={styles.headerTitle}>Hello again</Text>
+                  <Text style={styles.headerTitle}>Welcome back</Text>
+                </View>
+              )}
               <View>
                 <Text style={styles.inputTitle}>NICKNAME</Text>
                 <TextInput
                   style={styles.input}
                   textAlign={"center"}
                   onFocus={() => setIsShowKeyboard(true)}
-                  value={state.email}
+                  value={state.nickname}
                   onChangeText={(value) =>
                     setstate((prevState) => ({ ...prevState, nickname: value }))
                   }
@@ -108,7 +116,7 @@ export default function RegisterScreen({ navigation }) {
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.btn}
-                onPress={keyboardHide}
+                onPress={handleSubmit}
               >
                 <Text style={styles.btnTitle}>SIGN UP</Text>
               </TouchableOpacity>
@@ -161,7 +169,7 @@ const styles = StyleSheet.create({
     color: "#f0f8ff",
     marginBottom: 10,
     fontSize: 18,
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
   btn: {
     borderRadius: 6,
@@ -185,7 +193,7 @@ const styles = StyleSheet.create({
   btnTitle: {
     color: Platform.OS === "ios" ? "#4169e1" : "#f0f8ff",
     fontSize: 18,
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
   header: {
     alignItems: "center",
@@ -194,6 +202,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 40,
     color: "#f0f8ff",
-    fontFamily: "DMMono-Regular",
+    fontFamily: "Kanit",
   },
 });
